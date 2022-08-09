@@ -1,8 +1,7 @@
 import 'package:daily_spending_tracker/controllers/number_controllers/numbers_controller.dart';
+import 'package:daily_spending_tracker/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
-import 'widgets/custom_bottom_nav_bar.dart';
 import 'controllers/theme_controller/theme_controller.dart';
 
 void main() {
@@ -37,7 +36,7 @@ class _MyAppState extends State<MyApp> {
                 theme:
                     themeNotifier.isDark ? ThemeData.dark() : ThemeData.light(),
                 debugShowCheckedModeBanner: false,
-                home: const PreservingBottomNavState());
+                home: const HomePage());
           }),
         ));
   }
