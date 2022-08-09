@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'current_total_preferences.dart';
 import 'daily_max_preferences.dart';

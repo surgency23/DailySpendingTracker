@@ -16,7 +16,10 @@ class PreservingBottomNavState extends StatefulWidget {
 class _PreservingBottomNavStateState extends State<PreservingBottomNavState> {
   int _selectedIndex = 1;
 
-  static final List<Widget> _pages = <Widget>[SettingsPage(), HomePage()];
+  static final List<Widget> _pages = <Widget>[
+    const SettingsPage(),
+    const HomePage()
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
