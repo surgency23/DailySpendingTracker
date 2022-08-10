@@ -22,7 +22,6 @@ class _HomePageState extends State<HomePage> {
             return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(10),
@@ -91,7 +90,6 @@ class _HomePageState extends State<HomePage> {
                         builder: (context) {
                           return AlertDialog(
                               title: const Text("New Daily Maximum"),
-                              actionsAlignment: MainAxisAlignment.center,
                               actions: [
                                 TextButton(
                                     onPressed: () {
@@ -101,7 +99,10 @@ class _HomePageState extends State<HomePage> {
                               ],
                               content: TextField(
                                 decoration: const InputDecoration(
-                                    labelText: "Maximum", prefixText: "\$ "),
+                                  border: OutlineInputBorder(),
+                                  labelText: "Maximum",
+                                  prefixText: "\$ ",
+                                ),
                                 keyboardType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.allow(
@@ -110,6 +111,7 @@ class _HomePageState extends State<HomePage> {
                                 onSubmitted: (value) {
                                   numbersNotifier.maxDaily =
                                       double.parse(value);
+                                  Navigator.of(context).pop();
                                 },
                               ));
                         },
@@ -132,14 +134,13 @@ class _HomePageState extends State<HomePage> {
                                       numbersNotifier.resetDailyLimit();
                                       Navigator.of(context).pop();
                                     },
-                                    child: Text("Yes")),
+                                    child: const Text("Yes")),
                                 TextButton(
                                     onPressed: () =>
                                         Navigator.of(context).pop(),
-                                    child: Text("No"))
+                                    child: const Text("No"))
                               ]);
                         });
-                    //numbersNotifier.resetDailyLimit();
                   },
                   child: const Text("Reset Daily Total"),
                 ),
@@ -159,9 +160,18 @@ class _HomePageState extends State<HomePage> {
                     Widget? child) {
                   return AlertDialog(
                     title: const Text("New Transaction"),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("Cancel")),
+                    ],
                     content: TextField(
                       decoration: const InputDecoration(
-                          labelText: "Money Spent", prefixText: "\$ "),
+                          border: OutlineInputBorder(),
+                          labelText: "Money Spent",
+                          prefixText: "\$ "),
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(
