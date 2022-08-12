@@ -1,27 +1,34 @@
+import 'rolling_total_preferences.dart';
 import 'package:flutter/material.dart';
-import 'current_total_preferences.dart';
-import 'daily_max_preferences.dart';
+import 'daily_total_preferences.dart';
+import 'max_preferences.dart';
 import 'time_stamp_preferences.dart';
 
 class NumbersController extends ChangeNotifier {
-  late CurrentTotalPreferences _totalPreferences;
+  late RollingTotalPreferences _rollingTotalPreferences;
   late MaxPreferences _maxPreferences;
   late TimeStampPreferences _timeStampPreferences;
+  late DailyTotalPreferences _dailyTotalPreferences;
 
   late String _timeStamp;
   late double _maxDaily;
-  late double _currentTotal;
+  late double _rollingTotal;
+  late double _dailyTotal;
 
   String get timeStamp => _timeStamp;
   double get maxDaily => _maxDaily;
-  double get currentTotal => _currentTotal;
+  double get rollingTotal => _rollingTotal;
+  double get dailyTotal => _dailyTotal;
 
   NumbersController() {
     _maxDaily = 0.00;
-    _currentTotal = 0.00;
+    _rollingTotal = 0.00;
+    _dailyTotal = 0.00;
     _timeStamp = DateTime.now().toString();
+
+    _dailyTotalPreferences = DailyTotalPreferences();
     _timeStampPreferences = TimeStampPreferences();
-    _totalPreferences = CurrentTotalPreferences();
+    _rollingTotalPreferences = RollingTotalPreferences();
     _maxPreferences = MaxPreferences();
     getPreferences();
   }
@@ -34,14 +41,21 @@ class NumbersController extends ChangeNotifier {
   }
 
   //setting currentTotals's value
-  set currentTotal(double value) {
+  set rollingTotal(double value) {
     int resets = compareTimeStamps(DateTime.now(), DateTime.parse(_timeStamp));
     if (resets > 0) {
-      _currentTotal += (_maxDaily * resets);
+      _rollingTotal += (_maxDaily * resets);
       timeStamp = DateTime.now().toString();
+      resetDailyLimit();
     }
-    _currentTotal -= value;
-    _totalPreferences.setTotal(_currentTotal);
+    _rollingTotal -= value;
+    _rollingTotalPreferences.setTotal(_rollingTotal);
+    notifyListeners();
+  }
+
+  set dailyTotal(double value) {
+    _dailyTotal -= value;
+    _dailyTotalPreferences.setTotal(_dailyTotal);
     notifyListeners();
   }
 
@@ -61,15 +75,22 @@ class NumbersController extends ChangeNotifier {
     return currentTimeStamp.difference(lastTimeStamp).inDays;
   }
 
+  resetRollingDailyLimit() {
+    _rollingTotal = _maxDaily;
+    _rollingTotalPreferences.setTotal(_maxDaily);
+    notifyListeners();
+  }
+
   resetDailyLimit() {
-    _currentTotal = _maxDaily;
-    _totalPreferences.setTotal(_maxDaily);
+    _dailyTotal = _maxDaily;
+    _dailyTotalPreferences.setTotal(_maxDaily);
     notifyListeners();
   }
 
   getPreferences() async {
     _maxDaily = await _maxPreferences.getMax();
-    _currentTotal = await _totalPreferences.getTotal();
+    _dailyTotal = await _dailyTotalPreferences.getTotal();
+    _rollingTotal = await _rollingTotalPreferences.getTotal();
     _timeStamp = await _timeStampPreferences.getTimeStamp();
     notifyListeners();
   }

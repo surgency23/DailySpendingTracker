@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CurrentTotalPreferences {
-  static const PREF_KEY = "currentTotal";
+class DailyTotalPreferences {
+  static const PREF_KEY = "dailyTotal";
 
   setTotal(double value) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();

@@ -36,13 +36,13 @@ class _HomePageState extends State<HomePage> {
                                 padding: const EdgeInsets.all(30),
                                 child: Column(
                                   children: [
-                                    const Text("Daily Budget:",
+                                    const Text("Daily Max:",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 40)),
+                                            fontSize: 30)),
                                     Text(
                                         "\$${numbersNotifier.maxDaily.toStringAsFixed(2)}",
-                                        style: const TextStyle(fontSize: 40))
+                                        style: const TextStyle(fontSize: 30))
                                   ],
                                 ),
                               ))),
@@ -61,13 +61,42 @@ class _HomePageState extends State<HomePage> {
                                 padding: const EdgeInsets.all(30),
                                 child: Column(
                                   children: [
-                                    const Text("Today's Budget:",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 40)),
+                                    const Center(
+                                      child: Text("Rolling Daily Budget:",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 30)),
+                                    ),
                                     Text(
-                                        "\$${numbersNotifier.currentTotal.toStringAsFixed(2)}",
-                                        style: const TextStyle(fontSize: 40))
+                                        "\$${numbersNotifier.rollingTotal.toStringAsFixed(2)}",
+                                        style: const TextStyle(fontSize: 30))
+                                  ],
+                                )),
+                          )),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Card(
+                          elevation: 5,
+                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Padding(
+                                padding: const EdgeInsets.all(30),
+                                child: Column(
+                                  children: [
+                                    const Center(
+                                      child: Text("Today's Budget:",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 30)),
+                                    ),
+                                    Text(
+                                        "\$${numbersNotifier.dailyTotal.toStringAsFixed(2)}",
+                                        style: const TextStyle(fontSize: 30))
                                   ],
                                 )),
                           )),
@@ -81,7 +110,7 @@ class _HomePageState extends State<HomePage> {
         Consumer<NumbersController>(
           builder: (context, NumbersController numbersNotifier, Widget? child) {
             return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
                     onPressed: () {
@@ -124,7 +153,33 @@ class _HomePageState extends State<HomePage> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                              title: const Text("Reset Daily Total"),
+                              title: const Text("Reset Rolling Total"),
+                              content: Text(
+                                  "Reset rolling total to \$${numbersNotifier.maxDaily}?"),
+                              actionsAlignment: MainAxisAlignment.spaceEvenly,
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      numbersNotifier.resetRollingDailyLimit();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("Yes")),
+                                TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                    child: const Text("No"))
+                              ]);
+                        });
+                  },
+                  child: const Text("Reset Rolling Total"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                              title: const Text("Reset Today's Total"),
                               content: Text(
                                   "Reset daily total to \$${numbersNotifier.maxDaily}?"),
                               actionsAlignment: MainAxisAlignment.spaceEvenly,
@@ -142,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                               ]);
                         });
                   },
-                  child: const Text("Reset Daily Total"),
+                  child: const Text("Reset Today's Total"),
                 ),
               ],
             );
@@ -178,7 +233,8 @@ class _HomePageState extends State<HomePage> {
                             RegExp(r'^\d+\.?\d{0,2}')),
                       ],
                       onSubmitted: (value) {
-                        numbersNotifier.currentTotal = double.parse(value);
+                        numbersNotifier.rollingTotal = double.parse(value);
+                        numbersNotifier.dailyTotal = double.parse(value);
                         Navigator.of(context).pop();
                       },
                     ),
