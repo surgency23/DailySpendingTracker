@@ -1,13 +1,15 @@
 import 'package:daily_spending_tracker/controllers/number_controllers/numbers_controller.dart';
+import 'package:daily_spending_tracker/controllers/payroll_controller/payroll_controller.dart';
 import 'package:daily_spending_tracker/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'controllers/theme_controller/theme_controller.dart';
 
 void main() {
-  runApp(MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => NumbersController())],
-      child: const MyApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => NumbersController()),
+    ChangeNotifierProvider(create: (_) => FrequencyController())
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
