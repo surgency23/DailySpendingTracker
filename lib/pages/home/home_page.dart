@@ -19,35 +19,10 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: Consumer<NumbersController>(
           builder: (context, NumbersController numbersNotifier, Widget? child) {
-            return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
+            return ListView(
+                // mainAxisAlignment: MainAxisAlignment.start,
+                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Card(
-                          elevation: 5,
-                          color: Theme.of(context).colorScheme.surfaceVariant,
-                          child: Align(
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: const EdgeInsets.all(30),
-                                child: Column(
-                                  children: [
-                                    const Text("Daily Max:",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 30)),
-                                    Text(
-                                        "\$${numbersNotifier.maxDaily.toStringAsFixed(2)}",
-                                        style: const TextStyle(fontSize: 30))
-                                  ],
-                                ),
-                              ))),
-                    ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: SizedBox(
@@ -90,6 +65,33 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     const Center(
                                       child: Text("Today's Budget:",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 30)),
+                                    ),
+                                    Text(
+                                        "\$${numbersNotifier.dailyTotal.toStringAsFixed(2)}",
+                                        style: const TextStyle(fontSize: 30))
+                                  ],
+                                )),
+                          )),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Card(
+                          elevation: 5,
+                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Padding(
+                                padding: const EdgeInsets.all(30),
+                                child: Column(
+                                  children: [
+                                    const Center(
+                                      child: Text("Pay Schedule:",
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 30)),
@@ -146,7 +148,10 @@ class _HomePageState extends State<HomePage> {
                         },
                       );
                     },
-                    child: const Text("Set New Max")),
+                    child: const Text(
+                      "Set New Max",
+                      style: TextStyle(fontSize: 10),
+                    )),
                 TextButton(
                   onPressed: () {
                     showDialog(
@@ -171,7 +176,10 @@ class _HomePageState extends State<HomePage> {
                               ]);
                         });
                   },
-                  child: const Text("Reset Rolling Total"),
+                  child: const Text(
+                    "Reset Rolling Total",
+                    style: TextStyle(fontSize: 10),
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
@@ -197,7 +205,10 @@ class _HomePageState extends State<HomePage> {
                               ]);
                         });
                   },
-                  child: const Text("Reset Today's Total"),
+                  child: const Text(
+                    "Reset Today's Total",
+                    style: TextStyle(fontSize: 10),
+                  ),
                 ),
               ],
             );
