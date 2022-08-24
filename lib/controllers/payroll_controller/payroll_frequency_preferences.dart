@@ -3,13 +3,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 class FrequencyPreferences {
   static const PREF_KEY = "payFrequency";
 
-  setFrequency(int value) async {
+  setFrequency(String value) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setInt(PREF_KEY, value);
+    sharedPreferences.setString(PREF_KEY, value);
   }
 
   getFrequency() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getInt(PREF_KEY) ?? 1;
+    return sharedPreferences.getString(PREF_KEY) ?? "Bi-Weekly";
   }
 }

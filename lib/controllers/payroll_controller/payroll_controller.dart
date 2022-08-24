@@ -2,20 +2,32 @@ import 'payroll_frequency_preferences.dart';
 import 'package:flutter/material.dart';
 
 class FrequencyController extends ChangeNotifier {
-  late FrequencyPreferences _frequencyPreferences;
+  // "365(Daily)" || 52(Weekly), 26(Bi-Weekly), 24(Semi-Monthly), 12(Monthy), 4(Quarterly), 2(Semi-Annually), 1(Annually)"
 
-  late int _frequency;
-  int get frequency => _frequency;
+  late FrequencyPreferences _frequencyPreferences;
+  late String _frequency;
+  String get frequency => _frequency;
+
+  List<String> get options => [
+        "Daily",
+        "Weekly",
+        "Bi-Weekly",
+        "Semi-Monthly",
+        "Monthly",
+        "Quarterly",
+        "Semi-Annually",
+        "Annually"
+      ];
 
   FrequencyController() {
     _frequency =
-        0; // 365(Daily), 52(Weekly), 26(Bi-Weekly), 24(Semi-Monthly), 12(Monthy), 4(Quarterly), 2(Semi-Annually), 1(Annually)
+        "Bi-Weekly!"; // 365(Daily), 52(Weekly), 26(Bi-Weekly), 24(Semi-Monthly), 12(Monthy), 4(Quarterly), 2(Semi-Annually), 1(Annually)
     _frequencyPreferences = FrequencyPreferences();
     getPreferences();
   }
 
   //setting frequency's value
-  set frequency(int value) {
+  set frequency(String value) {
     _frequency = value;
     notifyListeners();
   }

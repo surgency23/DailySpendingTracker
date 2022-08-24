@@ -18,240 +18,262 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: customAppBar(),
       body: Center(
-          child: ListView(
-              // mainAxisAlignment: MainAxisAlignment.start,
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: SizedBox(
-                width: double.infinity,
-                child: Card(
-                    elevation: 5,
-                    color: Theme.of(context).colorScheme.surfaceVariant,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.all(30),
-                        child: Consumer<NumbersController>(
-                          builder: (context, NumbersController numbersNotifier,
-                              Widget? child) {
-                            return Column(
-                              children: [
-                                const Center(
-                                  child: Text("Daily Max:",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 30)),
-                                ),
-                                Text(
-                                    "\$${numbersNotifier.dailyTotal.toStringAsFixed(2)}",
-                                    style: const TextStyle(fontSize: 30)),
-                                TextButton(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                              title: const Text(
-                                                  "New Daily Maximum"),
-                                              actions: [
-                                                TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child:
-                                                        const Text("Cancel")),
-                                              ],
-                                              content: TextField(
-                                                decoration:
-                                                    const InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                  labelText: "Maximum",
-                                                  prefixText: "\$ ",
-                                                ),
-                                                keyboardType:
-                                                    TextInputType.number,
-                                                inputFormatters: <
-                                                    TextInputFormatter>[
-                                                  FilteringTextInputFormatter
-                                                      .allow(RegExp(
-                                                          r'^\d+\.?\d{0,2}')),
-                                                ], // Only numbers can be entered
-                                                onSubmitted: (value) {
-                                                  numbersNotifier.maxDaily =
-                                                      double.parse(value);
+          child: ListView(children: [
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: SizedBox(
+            width: double.infinity,
+            child: Card(
+                elevation: 5,
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.all(30),
+                    child: Consumer<NumbersController>(
+                      builder: (context, NumbersController numbersNotifier,
+                          Widget? child) {
+                        return Column(
+                          children: [
+                            const Center(
+                              child: Text("Daily Max:",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 30)),
+                            ),
+                            Text(
+                                "\$${numbersNotifier.maxDaily.toStringAsFixed(2)}",
+                                style: const TextStyle(fontSize: 30)),
+                            TextButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                          title:
+                                              const Text("New Daily Maximum"),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
                                                   Navigator.of(context).pop();
                                                 },
-                                              ));
-                                        },
-                                      );
+                                                child: const Text("Cancel")),
+                                          ],
+                                          content: TextField(
+                                            decoration: const InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              labelText: "Maximum",
+                                              prefixText: "\$ ",
+                                            ),
+                                            keyboardType: TextInputType.number,
+                                            inputFormatters: <
+                                                TextInputFormatter>[
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp(r'^\d+\.?\d{0,2}')),
+                                            ], // Only numbers can be entered
+                                            onSubmitted: (value) {
+                                              numbersNotifier.maxDaily =
+                                                  double.parse(value);
+                                              Navigator.of(context).pop();
+                                            },
+                                          ));
                                     },
-                                    child: const Text("Set New Max")),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                    )),
-              ),
-            ),
-            Padding(
-                padding: const EdgeInsets.all(10),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Card(
-                    elevation: 5,
-                    color: Theme.of(context).colorScheme.surfaceVariant,
-                    child: Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: Consumer<NumbersController>(builder: (context,
-                              NumbersController numbersNotifier,
-                              Widget? child) {
-                            return Column(
-                              children: [
-                                const Center(
-                                  child: Text("Rolling Daily Budget:",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 30)),
-                                ),
-                                Text(
-                                    "\$${numbersNotifier.rollingTotal.toStringAsFixed(2)}",
-                                    style: const TextStyle(fontSize: 30)),
-                                TextButton(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                              title: const Text(
-                                                  "Reset Rolling Total"),
-                                              content: Text(
-                                                  "Reset rolling total to \$${numbersNotifier.maxDaily}?"),
-                                              actionsAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              actions: [
-                                                TextButton(
-                                                    onPressed: () {
-                                                      numbersNotifier
-                                                          .resetRollingDailyLimit();
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: const Text("Yes")),
-                                                TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.of(context)
-                                                            .pop(),
-                                                    child: const Text("No"))
-                                              ]);
-                                        });
-                                  },
-                                  child: const Text("Reset Rolling Total"),
-                                ),
-                              ],
-                            );
-                          }),
-                        )),
+                                  );
+                                },
+                                child: const Text("Set New Max")),
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 )),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: SizedBox(
-                width: double.infinity,
-                child: Card(
-                    elevation: 5,
-                    color: Theme.of(context).colorScheme.surfaceVariant,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: Consumer<NumbersController>(builder: (context,
-                              NumbersController numbersNotifier,
-                              Widget? child) {
-                            return Column(
-                              children: [
-                                const Center(
-                                  child: Text("Today's Budget:",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 30)),
-                                ),
-                                Text(
-                                    "\$${numbersNotifier.dailyTotal.toStringAsFixed(2)}",
-                                    style: const TextStyle(fontSize: 30)),
-                                TextButton(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                              title: const Text(
-                                                  "Reset Today's Total"),
-                                              content: Text(
-                                                  "Reset daily total to \$${numbersNotifier.maxDaily}?"),
-                                              actionsAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              actions: [
-                                                TextButton(
-                                                    onPressed: () {
-                                                      numbersNotifier
-                                                          .resetDailyLimit();
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: const Text("Yes")),
-                                                TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.of(context)
-                                                            .pop(),
-                                                    child: const Text("No"))
-                                              ]);
-                                        });
+          ),
+        ),
+        Padding(
+            padding: const EdgeInsets.all(10),
+            child: SizedBox(
+              width: double.infinity,
+              child: Card(
+                elevation: 5,
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                child: Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: Consumer<NumbersController>(builder: (context,
+                          NumbersController numbersNotifier, Widget? child) {
+                        return Column(
+                          children: [
+                            const Center(
+                              child: Text("Rolling Daily Budget:",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 30)),
+                            ),
+                            Text(
+                                "\$${numbersNotifier.rollingTotal.toStringAsFixed(2)}",
+                                style: const TextStyle(fontSize: 30)),
+                            TextButton(
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                          title:
+                                              const Text("Reset Rolling Total"),
+                                          content: Text(
+                                              "Reset rolling total to \$${numbersNotifier.maxDaily}?"),
+                                          actionsAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  numbersNotifier
+                                                      .resetRollingDailyLimit();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text("Yes")),
+                                            TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                                child: const Text("No"))
+                                          ]);
+                                    });
+                              },
+                              child: const Text("Reset Rolling Total"),
+                            ),
+                          ],
+                        );
+                      }),
+                    )),
+              ),
+            )),
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: SizedBox(
+            width: double.infinity,
+            child: Card(
+                elevation: 5,
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: Consumer<NumbersController>(builder: (context,
+                          NumbersController numbersNotifier, Widget? child) {
+                        return Column(
+                          children: [
+                            const Center(
+                              child: Text("Today's Budget:",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 30)),
+                            ),
+                            Text(
+                                "\$${numbersNotifier.dailyTotal.toStringAsFixed(2)}",
+                                style: const TextStyle(fontSize: 30)),
+                            TextButton(
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                          title:
+                                              const Text("Reset Today's Total"),
+                                          content: Text(
+                                              "Reset daily total to \$${numbersNotifier.maxDaily}?"),
+                                          actionsAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  numbersNotifier
+                                                      .resetDailyLimit();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text("Yes")),
+                                            TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                                child: const Text("No"))
+                                          ]);
+                                    });
+                              },
+                              child: const Text("Reset Today's Total"),
+                            ),
+                          ],
+                        );
+                      })),
+                )),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: SizedBox(
+            width: double.infinity,
+            child: Card(
+                elevation: 5,
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: Consumer<FrequencyController>(builder: (context,
+                          FrequencyController frequencyNotifier,
+                          Widget? child) {
+                        return Column(children: [
+                          const Center(
+                            child: Text("Pay Schedule:",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 30)),
+                          ),
+                          Text(frequencyNotifier.frequency,
+                              style: const TextStyle(fontSize: 30)),
+                          TextButton(
+                              onPressed: (() {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return SimpleDialog(
+                                      title: const Text("Payment Frequency"),
+                                      children: frequencyNotifier.options
+                                          .map((String option) {
+                                        return SimpleDialogOption(
+                                          onPressed: () {
+                                            frequencyNotifier.frequency =
+                                                option;
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(option,
+                                              style: frequencyNotifier
+                                                          .frequency ==
+                                                      option
+                                                  ? const TextStyle(
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                      fontWeight:
+                                                          FontWeight.bold)
+                                                  : null),
+                                        );
+                                      }).toList(),
+                                    );
                                   },
-                                  child: const Text("Reset Today's Total"),
-                                ),
-                              ],
-                            );
-                          })),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: SizedBox(
-                width: double.infinity,
-                child: Card(
-                    elevation: 5,
-                    color: Theme.of(context).colorScheme.surfaceVariant,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: Consumer<FrequencyController>(builder:
-                              (context, FrequencyController frequencyNotifier,
-                                  Widget? child) {
-                            return Column(
-                              children: [
-                                const Center(
-                                  child: Text("Pay Schedule:",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 30)),
-                                ),
-                                Text("${frequencyNotifier.frequency}",
-                                    style: const TextStyle(fontSize: 30))
-                              ],
-                            );
-                          })),
-                    )),
-              ),
-            ),
-          ])),
+                                );
+                              }),
+                              child: Text("Change Payment Schedule"))
+
+// frequencyNotifier.options.map((String option) {
+//                               return ChoiceChip(
+//                                   label: Text(option), selected: false);
+//                             }).toList()
+                          // Text(frequencyNotifier.frequency,
+                          //     style: const TextStyle(fontSize: 30))
+                        ]);
+                      })),
+                )),
+          ),
+        ),
+      ])),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.attach_money),
         onPressed: () {
@@ -294,5 +316,49 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     );
+  }
+
+  List<Widget> frequencyDisplay(number) {
+    List<Widget> childrenArr = [];
+    Map<int, String> numberMap = {
+      0: "Select Payment frequency!",
+      1: "Annually",
+      2: "Semi-Annually",
+      4: "Quarterly",
+      12: "Monthy",
+      24: "Semi-Monthly",
+      26: "Bi-Weekly",
+      52: "Weekly",
+      365: "Daily"
+    };
+
+    if (number == 0) {
+      childrenArr.add(const Center(
+          child: Text("Set your Payment Schedule:",
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20))));
+      childrenArr.add(DropdownButton<String>(
+        value: numberMap[number],
+        items: numberMap.values.map((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        // <String>['Select Payment frequency!', 'Meeting', 'Home', 'Space']
+        //     .map((String value) {
+        //   return DropdownMenuItem<String>(
+        //     value: value,
+        //     child: Text(value),
+        //   );
+        // }).toList()
+        onChanged: (newValue) {
+          setState(() {
+            print(newValue);
+            print(numberMap.keys.iterator);
+          });
+        },
+      ));
+    }
+    return childrenArr;
   }
 }
