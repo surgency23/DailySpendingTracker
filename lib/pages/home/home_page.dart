@@ -1,7 +1,9 @@
 import 'package:daily_spending_tracker/controllers/number_controllers/numbers_controller.dart';
 import 'package:daily_spending_tracker/controllers/payroll_controller/payroll_controller.dart';
+import 'package:daily_spending_tracker/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/custom_app_bar.dart';
 
@@ -223,6 +225,54 @@ class _HomePageState extends State<HomePage> {
                           Widget? child) {
                         return Column(children: [
                           const Center(
+                            child: Text("Average to Maintain:",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 30)),
+                          ),
+                          Text(
+                              //rolling budget
+                              //!! figure out best way to find average left based on next payment date.
+                              (((compareTimeStamps(frequencyNotifier.payDate,
+                                                  DateTime.now()) *
+                                              //
+                                              50) -
+                                          66) /
+                                      compareTimeStamps(
+                                          frequencyNotifier.payDate,
+                                          DateTime.now()))
+                                  .toStringAsFixed(2),
+                              style: const TextStyle(fontSize: 30)),
+                          const Text("Next Payment Date:",
+                              style: TextStyle(fontSize: 20)),
+                          Text(
+                              DateFormat("MMMM dd yyyy")
+                                  .format(frequencyNotifier.payDate),
+                              style: const TextStyle(fontSize: 15)),
+                          TextButton(
+                            onPressed: () {},
+                            child: const Text("Date not correct?"),
+                          )
+                        ]);
+                      })),
+                )),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: SizedBox(
+            width: double.infinity,
+            child: Card(
+                elevation: 5,
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: Consumer<FrequencyController>(builder: (context,
+                          FrequencyController frequencyNotifier,
+                          Widget? child) {
+                        return Column(children: [
+                          const Center(
                             child: Text("Pay Schedule:",
                                 style: TextStyle(
                                     fontWeight: FontWeight.w500, fontSize: 30)),
@@ -260,14 +310,7 @@ class _HomePageState extends State<HomePage> {
                                   },
                                 );
                               }),
-                              child: Text("Change Payment Schedule"))
-
-// frequencyNotifier.options.map((String option) {
-//                               return ChoiceChip(
-//                                   label: Text(option), selected: false);
-//                             }).toList()
-                          // Text(frequencyNotifier.frequency,
-                          //     style: const TextStyle(fontSize: 30))
+                              child: const Text("Change Payment Schedule"))
                         ]);
                       })),
                 )),

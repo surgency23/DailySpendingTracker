@@ -1,3 +1,5 @@
+import 'package:daily_spending_tracker/utils.dart';
+
 import 'rolling_total_preferences.dart';
 import 'package:flutter/material.dart';
 import 'daily_total_preferences.dart';
@@ -63,16 +65,6 @@ class NumbersController extends ChangeNotifier {
     _timeStamp = value;
     _timeStampPreferences.setTimeStamp(_timeStamp);
     notifyListeners();
-  }
-
-  compareTimeStamps(DateTime currentTimeStamp, DateTime lastTimeStamp) {
-    //round both last timestamp and current time stamp to midnight of that date and find the difference between the two.
-    lastTimeStamp =
-        DateTime(lastTimeStamp.year, lastTimeStamp.month, lastTimeStamp.day);
-    currentTimeStamp = DateTime(
-        currentTimeStamp.year, currentTimeStamp.month, currentTimeStamp.day);
-
-    return currentTimeStamp.difference(lastTimeStamp).inDays;
   }
 
   resetRollingDailyLimit() {
