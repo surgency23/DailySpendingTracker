@@ -229,19 +229,22 @@ class _HomePageState extends State<HomePage> {
                                 style: TextStyle(
                                     fontWeight: FontWeight.w500, fontSize: 30)),
                           ),
-                          Text(
-                              //rolling budget
-                              //!! figure out best way to find average left based on next payment date.
-                              (((compareTimeStamps(frequencyNotifier.payDate,
-                                                  DateTime.now()) *
-                                              //
-                                              50) -
-                                          66) /
-                                      compareTimeStamps(
-                                          frequencyNotifier.payDate,
-                                          DateTime.now()))
-                                  .toStringAsFixed(2),
-                              style: const TextStyle(fontSize: 30)),
+                          Consumer<NumbersController>(builder: (context,
+                              NumbersController numbersNotifier,
+                              Widget? child) {
+                            return Text(
+                                //rolling budget
+                                //!! figure out best way to find average left based on next payment date.
+                                (((compareTimeStamps(frequencyNotifier.payDate,
+                                                    DateTime.now()) *
+                                                numbersNotifier.maxDaily) +
+                                            numbersNotifier.rollingTotal) /
+                                        compareTimeStamps(
+                                            frequencyNotifier.payDate,
+                                            DateTime.now()))
+                                    .toStringAsFixed(2),
+                                style: const TextStyle(fontSize: 30));
+                          }),
                           const Text("Next Payment Date:",
                               style: TextStyle(fontSize: 20)),
                           Text(
@@ -249,7 +252,21 @@ class _HomePageState extends State<HomePage> {
                                   .format(frequencyNotifier.payDate),
                               style: const TextStyle(fontSize: 15)),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await showDatePicker(
+                                context: context,
+                                initialDate: frequencyNotifier.payDate,
+                                firstDate: DateTime.now(),
+                                lastDate: frequencyNotifier.payDate
+                                    .add(const Duration(days: 600)),
+                              ).then((selectedDate) {
+                                if (selectedDate != null) {
+                                  setState(() {
+                                    frequencyNotifier.payDate = selectedDate;
+                                  });
+                                }
+                              });
+                            },
                             child: const Text("Date not correct?"),
                           )
                         ]);
@@ -361,47 +378,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> frequencyDisplay(number) {
-    List<Widget> childrenArr = [];
-    Map<int, String> numberMap = {
-      0: "Select Payment frequency!",
-      1: "Annually",
-      2: "Semi-Annually",
-      4: "Quarterly",
-      12: "Monthy",
-      24: "Semi-Monthly",
-      26: "Bi-Weekly",
-      52: "Weekly",
-      365: "Daily"
-    };
-
-    if (number == 0) {
-      childrenArr.add(const Center(
-          child: Text("Set your Payment Schedule:",
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20))));
-      childrenArr.add(DropdownButton<String>(
-        value: numberMap[number],
-        items: numberMap.values.map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        // <String>['Select Payment frequency!', 'Meeting', 'Home', 'Space']
-        //     .map((String value) {
-        //   return DropdownMenuItem<String>(
-        //     value: value,
-        //     child: Text(value),
-        //   );
-        // }).toList()
-        onChanged: (newValue) {
-          setState(() {
-            print(newValue);
-            print(numberMap.keys.iterator);
-          });
-        },
-      ));
+  Future<DateTime> _selectDate(
+      BuildContext context, DateTime initialDate) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != initialDate) {
+      return picked;
+    } else {
+      return initialDate;
     }
-    return childrenArr;
   }
 }
