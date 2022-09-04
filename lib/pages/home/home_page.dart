@@ -344,31 +344,42 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, NumbersController numbersNotifier,
                     Widget? child) {
                   return AlertDialog(
-                    title: const Text("New Transaction"),
-                    actions: [
-                      TextButton(
-                          onPressed: () {
+                      title: const Text("New Transaction"),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("Cancel")),
+                      ],
+                      content: Consumer<FrequencyController>(builder: (context,
+                          FrequencyController frequencyNotifier,
+                          Widget? child) {
+                        return TextField(
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: "Money Spent",
+                              prefixText: "\$ "),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d+\.?\d{0,2}')),
+                          ],
+                          onSubmitted: (value) {
+                            numbersNotifier.rollingTotal = double.parse(value);
+                            numbersNotifier.dailyTotal = double.parse(value);
+                            print(compareTimeStamps(frequencyNotifier.payDate,
+                                numbersNotifier.timeStamp as DateTime));
+                            if (compareTimeStamps(frequencyNotifier.payDate,
+                                    numbersNotifier.timeStamp as DateTime) <=
+                                0) {
+                              frequencyNotifier
+                                  .updatePayDate(frequencyNotifier.frequency);
+                            }
                             Navigator.of(context).pop();
                           },
-                          child: const Text("Cancel")),
-                    ],
-                    content: TextField(
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Money Spent",
-                          prefixText: "\$ "),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d+\.?\d{0,2}')),
-                      ],
-                      onSubmitted: (value) {
-                        numbersNotifier.rollingTotal = double.parse(value);
-                        numbersNotifier.dailyTotal = double.parse(value);
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  );
+                        );
+                      }));
                 },
               );
             },

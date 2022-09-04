@@ -38,7 +38,6 @@ class FrequencyController extends ChangeNotifier {
     _frequency =
         "Daily"; // 365(Daily), 52(Weekly), 26(Bi-Weekly), 24(Semi-Monthly), 12(Monthy), 4(Quarterly), 2(Semi-Annually), 1(Annually)
     _payDate = DateTime.now();
-    ;
     _frequencyPreferences = FrequencyPreferences();
     _payDatePreferences = PayDatePreferences();
     getPreferences();
@@ -53,12 +52,15 @@ class FrequencyController extends ChangeNotifier {
   //setting frequency's value which in turn changes payDates value.
   set frequency(String value) {
     _frequency = value;
-    DateTime tempPayDate = DateTime.now().add(Duration(days: numbers[value]!));
-
-    payDate = DateTime(tempPayDate.year, tempPayDate.month, tempPayDate.day);
-
     _frequencyPreferences.setFrequency(_frequency);
+    updatePayDate(value);
     notifyListeners();
+  }
+
+  updatePayDate(String frequency) {
+    DateTime tempPayDate =
+        DateTime.now().add(Duration(days: numbers[frequency]!));
+    payDate = DateTime(tempPayDate.year, tempPayDate.month, tempPayDate.day);
   }
 
   getPreferences() async {
