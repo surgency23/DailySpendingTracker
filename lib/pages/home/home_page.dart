@@ -166,13 +166,13 @@ class _HomePageState extends State<HomePage> {
                         return Column(
                           children: [
                             const Center(
-                              child: Text("Today's Budget:",
+                              child: Text("Spent Today:",
                                   style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 30)),
                             ),
                             Text(
-                                "\$${numbersNotifier.dailyTotal.toStringAsFixed(2)}",
+                                "\$${(numbersNotifier.maxDaily - numbersNotifier.dailyTotal).toStringAsFixed(2)}",
                                 style: const TextStyle(fontSize: 30)),
                             TextButton(
                               onPressed: () {
